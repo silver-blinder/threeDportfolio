@@ -1,30 +1,50 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
+import { useEffect, useState } from "react";
+import EarthCanvas from "./components/canvas/EarthCanvas";
+import LocationInfo from "./components/sections/InfoSection/LocationInfo";
+import PersonalInfo from "./components/sections/InfoSection/PersonalInfo";
 import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0);
+  const [scrollProgress, setScrollProgress] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      const windowHeight = window.innerHeight;
+      const maxScroll = windowHeight * 1.2;
+      const progress = Math.min(scrollY / maxScroll, 1);
+      setScrollProgress(progress);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <main className="relative w-full">
+      <div className="pointer-events-none fixed bottom-0 left-0 right-0 z-[-1] h-[100svh] w-full overflow-hidden">
+        <EarthCanvas scrollProgress={scrollProgress} />
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>count is {count}</button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">Click on the Vite and React logos to learn more</p>
-    </>
+
+      <PersonalInfo scrollProgress={scrollProgress} />
+
+      <LocationInfo scrollProgress={scrollProgress} />
+
+      {/* <div className="pointer-events-none fixed top-1/2 flex w-[11px] -translate-y-1/2 flex-col justify-between overflow-hidden transition-opacity left-[0.9375rem] h-[73svh]">
+        <div className="absolute bottom-0 left-[4px] top-0 z-0 w-[1px] -translate-x-1/2 bg-[#4c4c4c]">
+          <div
+            className="absolute top-0 left-0 w-full bg-white transition-transform duration-300 origin-top"
+            style={{
+              height: "100%",
+              transform: `scaleY(${scrollProgress})`,
+              transformOrigin: "top",
+            }}
+          />
+        </div>
+        <div className="relative z-20 size-[8px] rounded-full bg-white" />
+        <div className="relative z-20 size-[8px] rounded-full bg-white" />
+      </div> */}
+    </main>
   );
 }
 
