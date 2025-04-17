@@ -3,7 +3,12 @@ import { Html, useTexture } from "@react-three/drei";
 import { useRef } from "react";
 import * as THREE from "three";
 
-function Earth({ scrollProgress = 0 }) {
+interface EarthProps {
+  scrollProgress?: number;
+  opacity?: number;
+}
+
+function Earth({ scrollProgress = 0, opacity = 1 }: EarthProps) {
   const earthRef = useRef<Mesh>(null);
 
   const atmosphereRef = useRef<Mesh>(null);
@@ -36,7 +41,7 @@ function Earth({ scrollProgress = 0 }) {
     z: startRotation.z,
   };
 
-  const yPosition = -3 + scrollProgress * 0.5;
+  const yPosition = -3 + scrollProgress * 0.5 - (1 - opacity) * 2;
   const scale = 3 + scrollProgress * 0.5;
 
   const getPositionFromLatLng = (lat: number, lng: number, radius: number = 1) => {
@@ -66,6 +71,8 @@ function Earth({ scrollProgress = 0 }) {
           shininess={15}
           emissive={new THREE.Color(0x112244)}
           emissiveIntensity={0.1}
+          transparent
+          opacity={opacity}
         />
       </mesh>
 

@@ -1,16 +1,36 @@
-function LocationInfo({ scrollProgress = 0 }) {
+interface LocationInfoProps {
+  scrollProgress?: number;
+  style?: {
+    opacity?: number;
+    [key: string]: any;
+  };
+}
+
+function LocationInfo({ scrollProgress = 0, style = {} }: LocationInfoProps) {
+  const isVisible = scrollProgress > 0.6;
+  const shouldFadeOut = style.opacity !== undefined ? style.opacity < 1 : false;
+
   return (
     <section className="relative h-[100svh]">
       <div
         className="fixed inset-0 flex items-center px-[2rem] pt-[30vh]"
         style={{
-          opacity: scrollProgress > 0.6 ? 1 : 0,
-          transform: `translateY(${scrollProgress > 0.6 ? 0 : 500}px)`,
+          ...style,
+          opacity: shouldFadeOut ? style.opacity : isVisible ? 1 : 0,
+          transform: `translateY(${
+            shouldFadeOut ? `${(1 - Number(style.opacity)) * -100}px` : isVisible ? 0 : 500
+          }px)`,
           transition: "opacity 0.8s ease, transform 0.8s ease",
         }}
       >
         <div className="flex items-start gap-x-8">
-          <div className="aspect-[85/59] w-[178px]">
+          <div
+            className="aspect-[85/59] w-[178px]"
+            style={{
+              transform: shouldFadeOut ? `scale(${style.opacity})` : "scale(1)",
+              transition: "transform 0.8s ease",
+            }}
+          >
             <img
               className="w-full"
               src="/china-flag-icon.svg"
@@ -20,7 +40,15 @@ function LocationInfo({ scrollProgress = 0 }) {
             />
           </div>
 
-          <div className="text-white">
+          <div
+            className="text-white"
+            style={{
+              transform: shouldFadeOut
+                ? `translateX(${(1 - Number(style.opacity)) * 50}px)`
+                : "translateX(0)",
+              transition: "transform 0.8s ease",
+            }}
+          >
             <h2 className="mb-6 text-[2.5rem] font-bold leading-none tracking-wider">
               SHANGHAI
               <br />
