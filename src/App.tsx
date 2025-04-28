@@ -43,7 +43,7 @@ function App() {
         }}
       />
 
-      <Skills progress={scrollProgress} />
+      <Skills />
 
       {/* <Experience progress={scrollProgress} /> */}
     </main>

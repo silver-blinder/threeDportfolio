@@ -50,9 +50,7 @@ const skills = [
   },
 ];
 
-function Skills({ progress = 0 }) {
-  const isVisible = progress > 0.6;
-
+function Skills() {
   return (
     <section className="relative flex h-[100svh] items-center overflow-visible pt-0 text-white px-[2rem]">
       <div
