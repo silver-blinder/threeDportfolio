@@ -50,18 +50,19 @@ const skills = [
   },
 ];
 
-function Skills({ progress = 0, shouldShow = false }) {
+function Skills({ progress = 0 }) {
+  const isVisible = progress > 0.6;
+
   return (
-    <section className="relative flex h-[100svh] items-start md:items-center overflow-hidden pt-[6.25rem] text-white px-[2rem]">
+    <section className="relative flex h-[100svh] items-center overflow-visible pt-0 text-white px-[2rem]">
       <div
-        className="flex flex-col lg:flex-row transform transition-all duration-2000"
+        className="flex flex-col lg:flex-row transform w-full"
         style={{
-          opacity: shouldShow ? progress : 0,
-          transform: `translateY(${shouldShow ? (1 - progress) * 100 : 100}px)`,
-          pointerEvents: shouldShow ? "auto" : "none",
+          opacity: 1,
+          transform: `translateY(${400}px)`,
         }}
       >
-        <div className="relative flex flex-col lg:w-1/2 w-full items-center justify-center overflow-hidden rounded-lg px-20 pb-8 pt-8">
+        <div className="relative flex flex-col lg:w-1/2 w-full items-center justify-center rounded-lg px-8 md:px-20 pb-8 pt-8">
           <span className="text-white text-[2.5rem] font-bold leading-none tracking-wider">
             Skills
           </span>

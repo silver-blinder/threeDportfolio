@@ -25,23 +25,23 @@ function Earth({ scrollProgress = 0, opacity = 1 }: EarthProps) {
 
   const startRotation = {
     x: 0.4,
-    y: Math.PI - 0.3,
+    y: Math.PI - 0.6,
     z: 0,
   };
 
   const endRotation = {
     x: 0.4,
-    y: Math.PI - 1.2,
+    y: Math.PI - 1.8,
     z: 0,
   };
 
   const currentRotation = {
     x: startRotation.x,
-    y: startRotation.y + (endRotation.y - startRotation.y) * scrollProgress,
+    y: startRotation.y + (endRotation.y - startRotation.y) * scrollProgress * 2,
     z: startRotation.z,
   };
 
-  const yPosition = -3 + scrollProgress * 0.5 - (1 - opacity) * 2;
+  const yPosition = -2.5 + scrollProgress * 0.5 - (1 - opacity) * 2;
   const scale = 3 + scrollProgress * 0.5;
 
   const getPositionFromLatLng = (lat: number, lng: number, radius: number = 1) => {
@@ -56,6 +56,9 @@ function Earth({ scrollProgress = 0, opacity = 1 }: EarthProps) {
   };
 
   const markerPosition = getPositionFromLatLng(shanghai.lat, shanghai.lng, 1.02);
+
+  // 添加光晕动画相关的计算
+  const atmosphereOpacity = opacity * (1 - Math.max(0, (scrollProgress - 0.5) * 2));
 
   return (
     <group
@@ -88,15 +91,18 @@ function Earth({ scrollProgress = 0, opacity = 1 }: EarthProps) {
           `}
           fragmentShader={`
             varying vec3 vNormal;
+            uniform float atmosphereOpacity;
             void main() {
               float intensity = pow(0.75 - dot(vNormal, vec3(0.0, 0.0, 1.0)), 2.0);
-              gl_FragColor = vec4(0.3, 0.6, 1.0, 1.0) * intensity;
+              gl_FragColor = vec4(0.3, 0.6, 1.0, atmosphereOpacity) * intensity;
             }
           `}
+          uniforms={{
+            atmosphereOpacity: { value: atmosphereOpacity },
+          }}
           blending={THREE.AdditiveBlending}
           side={THREE.BackSide}
           transparent
-          opacity={0.8}
         />
       </mesh>
 
@@ -112,15 +118,18 @@ function Earth({ scrollProgress = 0, opacity = 1 }: EarthProps) {
           `}
           fragmentShader={`
             varying vec3 vNormal;
+            uniform float atmosphereOpacity;
             void main() {
               float intensity = pow(0.7 - dot(vNormal, vec3(0.0, 0.0, 1.0)), 1.5);
-              gl_FragColor = vec4(0.3, 0.6, 1.0, 1.0) * intensity;
+              gl_FragColor = vec4(0.3, 0.6, 1.0, atmosphereOpacity) * intensity;
             }
           `}
+          uniforms={{
+            atmosphereOpacity: { value: atmosphereOpacity * 0.625 }, // 外层稍微淡一些
+          }}
           blending={THREE.AdditiveBlending}
           side={THREE.BackSide}
           transparent
-          opacity={0.5}
         />
       </mesh>
 
@@ -129,9 +138,9 @@ function Earth({ scrollProgress = 0, opacity = 1 }: EarthProps) {
           transform
           occlude
           style={{
-            transition: "all 0.5s",
-            opacity: scrollProgress > 0.6 ? 1 : 0,
-            transform: `scale(${scrollProgress > 0.6 ? 0.3 : 0})`,
+            transition: "all 1.5s",
+            opacity: scrollProgress > 0.1 ? 1 : 0,
+            transform: `scale(${scrollProgress > 0.1 ? 0.3 : 0})`,
           }}
           className="pointer-events-none"
         >

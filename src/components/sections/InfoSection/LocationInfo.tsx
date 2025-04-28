@@ -7,7 +7,7 @@ interface LocationInfoProps {
 }
 
 function LocationInfo({ scrollProgress = 0, style = {} }: LocationInfoProps) {
-  const isVisible = scrollProgress > 0.6;
+  const isVisible = scrollProgress > 0.1;
   const shouldFadeOut = style.opacity !== undefined ? style.opacity < 1 : false;
 
   return (

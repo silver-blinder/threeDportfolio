@@ -22,7 +22,7 @@ export function HoverEffect({
         <a
           href={item?.link}
           key={item?.link}
-          className="relative group  block p-2 h-full w-full"
+          className="relative group  block p-2 h-full w-full max-h-[350px]"
           onMouseEnter={() => setHoveredIndex(idx)}
           onMouseLeave={() => setHoveredIndex(null)}
         >
@@ -75,7 +75,7 @@ export function CardTitle({
   children: React.ReactNode;
 }) {
   return (
-    <h4 className={cn("text-blue-200 font-bold tracking-wide mt-4 text-lg", className)}>
+    <h4 className={cn("text-blue-200 font-bold tracking-wide mt-4 text-lg select-none", className)}>
       {children}
     </h4>
   );
@@ -90,7 +90,7 @@ export function CardDescription({
   return (
     <p
       className={cn(
-        "mt-8 text-slate-300 tracking-wide leading-relaxed text-sm opacity-80",
+        "mt-8 text-slate-300 tracking-wide leading-relaxed text-sm opacity-80 select-none",
         className
       )}
     >
